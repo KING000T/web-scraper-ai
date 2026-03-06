@@ -18,7 +18,7 @@ setup(
     description="A comprehensive Python-based web scraping system",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/your-username/web-scraper-ai",
+    url="https://github.com/KING000T/web-scraper-ai",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -73,8 +73,8 @@ setup(
     zip_safe=False,
     keywords="web scraping, data extraction, automation, ai, machine learning",
     project_urls={
-        "Bug Reports": "https://github.com/your-username/web-scraper-ai/issues",
-        "Source": "https://github.com/your-username/web-scraper-ai",
+        "Bug Reports": "https://github.com/KING000T/web-scraper-ai/issues",
+        "Source": "https://github.com/KING000T/web-scraper-ai",
         "Documentation": "https://web-scraper-ai.readthedocs.io/",
     },
 )

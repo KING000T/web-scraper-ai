@@ -27,7 +27,7 @@ A comprehensive, production-ready Python-based web scraping system capable of ex
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/web-scraper-ai.git
+git clone https://github.com/KING000T/web-scraper-ai.git
 cd web-scraper-ai
 ```
 

@@ -95,11 +95,11 @@ web-scraper-ai = "main:main"
 ws-manage = "manage:main"
 
 [project.urls]
-Homepage = "https://github.com/your-username/web-scraper-ai"
+Homepage = "https://github.com/KING000T/web-scraper-ai"
 Documentation = "https://web-scraper-ai.readthedocs.io/"
-Repository = "https://github.com/your-username/web-scraper-ai.git"
-"Bug Reports" = "https://github.com/your-username/web-scraper-ai/issues"
-Changelog = "https://github.com/your-username/web-scraper-ai/blob/main/CHANGELOG.md"
+Repository = "https://github.com/KING000T/web-scraper-ai.git"
+"Bug Reports" = "https://github.com/KING000T/web-scraper-ai/issues"
+Changelog = "https://github.com/KING000T/web-scraper-ai/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["."]

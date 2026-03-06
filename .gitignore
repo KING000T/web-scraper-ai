@@ -1,0 +1,381 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Project specific
+scraper.db
+scraper.db-journal
+scraper.db-wal
+scraper.db-shm
+
+# Logs
+logs/
+*.log
+
+# Exports
+exports/
+*.csv
+*.json
+*.xlsx
+*.xls
+
+# Uploads
+uploads/
+temp/
+*.tmp
+
+# Backups
+backups/
+*.backup
+*.bak
+
+# Browser data
+chromedriver*
+geckodriver*
+*.crx
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Kubernetes
+*.kubeconfig
+
+# Monitoring
+prometheus_data/
+grafana_data/
+
+# Node modules (if using frontend build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build
+frontend/dist/
+frontend/build/
+frontends/dist/
+frontends/build/
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Configuration files with secrets
+config/secrets.py
+config/local.py
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.backup
+
+# Test files
+test_*.db
+test_*.sqlite
+
+# Performance data
+*.prof
+*.profile
+
+# Coverage
+.coverage
+htmlcov/
+
+# Security
+*.p12
+*.pfx
+*.jks
+
+# Local development
+local/
+dev/
+development/
+
+# Cache
+.cache/
+__pycache__/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Jupyter notebooks
+*.ipynb
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Project specific
+scraped_data/
+test_results/
+performance_tests/
+load_tests/
+
+# Browser extensions
+*.crx
+
+# WebDriver
+chromedriver
+geckodriver
+phantomjs
+
+# Selenium
+selenium-server-standalone-*.jar
+
+# Chrome
+chrome_debug.log
+
+# Firefox
+firefox_debug.log
+
+# Edge
+edge_debug.log
+
+# Safari
+safari_debug.log
+
+# Mobile app data
+*.apk
+*.ipa
+
+# API keys and secrets
+api_keys.txt
+secrets.txt
+private_keys.txt
+
+# Local configuration
+local_settings.py
+local_config.py
+
+# Development tools
+.flake8
+.pylintrc
+.mypy.ini
+bandit.yaml
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage.xml
+
+# Performance profiling
+*.prof
+*.profile
+*.profile.*
+
+# Load testing
+load_test_results/
+jmeter_results/
+
+# Security scans
+security_scan_results/
+vulnerability_reports/
+
+# CI/CD
+.github/workflows/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Deployment
+deployment/
+terraform/
+ansible/
+puppet/
+
+# Monitoring
+monitoring/
+metrics/
+alerts/
+
+# Backup
+backup/
+restore/
+
+# Temporary files for testing
+tmp/
+temp/
+temp_data/

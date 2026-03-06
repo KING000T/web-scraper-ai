@@ -1,0 +1,295 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-scraper-api
+  labels:
+    app: web-scraper
+    component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-scraper
+      component: api
+  template:
+    metadata:
+      labels:
+        app: web-scraper
+        component: api
+    spec:
+      containers:
+      - name: web-scraper
+        image: web-scraper:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://scraper_user:scraper_password@postgres:5432/web_scraper"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: CELERY_BROKER_URL
+          value: "redis://redis:6379"
+        - name: CELERY_RESULT_BACKEND
+          value: "redis://redis:6379"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: ENVIRONMENT
+          value: "production"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: exports
+          mountPath: /app/exports
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: exports
+        persistentVolumeClaim:
+          claimName: exports-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-scraper-service
+spec:
+  selector:
+    app: web-scraper
+    component: api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-scraper-worker
+  labels:
+    app: web-scraper
+    component: worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-scraper
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: web-scraper
+        component: worker
+    spec:
+      containers:
+      - name: celery-worker
+        image: web-scraper:latest
+        command: ["celery", "-A", "tasks", "worker", "--loglevel=info", "--concurrency=4"]
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://scraper_user:scraper_password@postgres:5432/web_scraper"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: CELERY_BROKER_URL
+          value: "redis://redis:6379"
+        - name: CELERY_RESULT_BACKEND
+          value: "redis://redis:6379"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: ENVIRONMENT
+          value: "production"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: exports
+          mountPath: /app/exports
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: exports
+        persistentVolumeClaim:
+          claimName: exports-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-scraper-beat
+  labels:
+    app: web-scraper
+    component: beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-scraper
+      component: beat
+  template:
+    metadata:
+      labels:
+        app: web-scraper
+        component: beat
+    spec:
+      containers:
+      - name: celery-beat
+        image: web-scraper:latest
+        command: ["celery", "-A", "tasks", "beat", "--loglevel=info"]
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://scraper_user:scraper_password@postgres:5432/web_scraper"
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: CELERY_BROKER_URL
+          value: "redis://redis:6379"
+        - name: CELERY_RESULT_BACKEND
+          value: "redis://redis:6379"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: ENVIRONMENT
+          value: "production"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: logs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: exports-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-scraper-config
+data:
+  nginx.conf: |
+    upstream web-scraper {
+        server web-scraper-service:80;
+    }
+    
+    server {
+        listen 80;
+        server_name _;
+        
+        location / {
+            proxy_pass http://web-scraper;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+        
+        location /health {
+            proxy_pass http://web-scraper/health;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: web-scraper
+    component: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-scraper
+      component: nginx
+  template:
+    metadata:
+      labels:
+        app: web-scraper
+        component: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: web-scraper-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: web-scraper
+    component: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
